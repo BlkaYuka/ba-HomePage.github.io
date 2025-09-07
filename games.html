@@ -21,30 +21,68 @@
     <main class="section">
       <div class="container">
         <h1 style="margin-top:0">게임 모음</h1>
-        <p class="muted">아래에서 원하는 게임을 선택하세요. 하나는 Unity WebGL, 두 개는 HTML5(비-Unity)입니다.</p>
+        <p class="muted">`games/config.json`에 경로만 추가하면 자동으로 표시됩니다.</p>
 
-        <div class="media-grid" style="margin-top:1.2rem">
-          <a class="image" href="./game.html" style="text-decoration:none">
-            <img src="./assets/sample.jpg" alt="Unity WebGL" />
-            <figcaption><strong>Unity WebGL</strong> — 전체화면 지원, 로딩 필요</figcaption>
-          </a>
-          <a class="image" href="./game-canvas.html" style="text-decoration:none">
-            <img src="./assets/sample.jpg" alt="HTML5 캔버스 게임" />
-            <figcaption><strong>HTML5 캔버스</strong> — 가벼운 예시 게임</figcaption>
-          </a>
-          <a class="image" href="./game-embed2.html" style="text-decoration:none">
-            <img src="./assets/sample.jpg" alt="HTML5 임베드 게임" />
-            <figcaption><strong>HTML5 임베드</strong> — 별도 폴더의 게임 임베드</figcaption>
-          </a>
-        </div>
+        <div class="media-grid" id="games-grid" style="margin-top:1.2rem"></div>
       </div>
     </main>
 
     <footer class="site-footer">
       <div class="container">
-        <small>총 3종의 게임을 제공합니다.</small>
+        <small id="games-count">총 0종의 게임을 제공합니다.</small>
       </div>
     </footer>
+    <script>
+      async function loadGames(){
+        const grid = document.getElementById('games-grid');
+        const counter = document.getElementById('games-count');
+        let list = [];
+        try{
+          const res = await fetch('./games/config.json', {cache:'no-store'});
+          if(res.ok){
+            const data = await res.json();
+            list = Array.isArray(data.games) ? data.games : [];
+          }
+        } catch(e){
+          // ignore; will use fallback
+        }
+        if(list.length === 0){
+          list = [
+            { title:'Unity WebGL', desc:'전체화면 지원, 로딩 필요', cover:'./assets/sample.jpg', src:'./game.html' },
+            { title:'HTML5 캔버스(예시)', desc:'가벼운 예시 게임', cover:'./assets/sample.jpg', src:'./game-canvas.html' },
+            { title:'임베드 게임 #2', desc:'별도 폴더의 게임 임베드', cover:'./assets/sample.jpg', src:'./games/game2/index.html' }
+          ];
+        }
+        const frag = document.createDocumentFragment();
+        list.forEach(item => {
+          const a = document.createElement('a');
+          a.className = 'image';
+          // route through play.html for consistent wrapper
+          const url = new URL('./play.html', location.href);
+          url.searchParams.set('src', item.src);
+          url.searchParams.set('title', item.title);
+          a.href = url.toString();
+          a.style.textDecoration = 'none';
+
+          const img = document.createElement('img');
+          img.src = item.cover || './assets/sample.jpg';
+          img.alt = item.title;
+          a.appendChild(img);
+
+          const cap = document.createElement('figcaption');
+          const strong = document.createElement('strong');
+          strong.textContent = item.title;
+          cap.appendChild(strong);
+          cap.append(' — ' + (item.desc || 'HTML5 게임'));
+          a.appendChild(cap);
+
+          frag.appendChild(a);
+        });
+        grid.innerHTML = '';
+        grid.appendChild(frag);
+        counter.textContent = `총 ${list.length}종의 게임을 제공합니다.`;
+      }
+      loadGames();
+    </script>
   </body>
   </html>
-

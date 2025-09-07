@@ -46,6 +46,7 @@
 - `game-canvas.html`: HTML5 캔버스 예시 게임
 - `game-embed2.html`, `game-embed3.html`: 각 `games/game2/`, `games/game3/`를 iframe으로 임베드
 - `game.js`: 캔버스 예시 게임 로직
+- `play.html`: 쿼리 파라미터로 경로를 받아 임베드(예: `play.html?src=./games/my/index.html&title=My%20Game`)
 - `assets/`: 이미지/영상 등 정적 파일 보관용
 - `unity/`: Unity WebGL 빌드 보관 폴더 (자세한 사용법 아래)
   - `unity/config.json`: 로더가 참조하는 파일명 매핑
@@ -53,6 +54,7 @@
   - `unity/StreamingAssets/`: 스트리밍 에셋 폴더
  - `games/`: 비-Unity HTML5 게임 폴더들
   - `games/game2/`, `games/game3/`에 각 게임 배포 파일을 넣고 `index.html` 진입점으로 설정
+  - `games/config.json`: 게임 목록 구성 파일
 
 ## 라이선스/유의사항
 
@@ -104,3 +106,29 @@
 
 3) 보안/정책
 - 일부 프레임워크 빌드는 `X-Frame-Options` 없이 정적 제공이 필요합니다. 외부 CDN에서 임베드하면 차단될 수 있으니 로컬 폴더에 함께 올리세요.
+
+## 일반 HTML5 게임 쉽게 추가하기
+
+1) 게임 폴더 넣기
+- 배포된 정적 파일을 `ba-festa-booth-site/games/<폴더명>/`에 복사하고 진입점을 `index.html`로 둡니다.
+- 예: `games/shooter/index.html`
+
+2) 목록에 추가 (`games/config.json`)
+- 아래 형식으로 항목을 하나 추가합니다.
+```json
+{
+  "title": "Shooter",
+  "desc": "웹용 HTML5 게임",
+  "cover": "./assets/sample.jpg",
+  "src": "./games/shooter/index.html"
+}
+```
+- 저장 후 `games.html`을 열면 자동으로 카드가 생성됩니다.
+
+3) 바로 실행(테스트용)
+- 별도 목록에 넣지 않아도 `play.html`로 경로만 넘기면 됩니다:
+- 예: `play.html?src=./games/shooter/index.html&title=Shooter`
+
+주의사항
+- `src`는 동일 저장소 내 상대경로만 허용합니다(보안/임베드 정책 상 외부 URL 불가).
+- 프레임워크 빌드(예: Phaser, Construct, Godot HTML5 등)는 자체 정책에 따라 키입력/사운드 트리거가 제한될 수 있습니다.
