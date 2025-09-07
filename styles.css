@@ -18,6 +18,8 @@ body{
   line-height:1.6;
 }
 .container{width:min(1100px,92%);margin:0 auto}
+h2{font-size:clamp(1.6rem,2.8vw,2.2rem);margin:.2rem 0 .8rem}
+.lead{font-size:1.05rem}
 
 .site-header{
   position:sticky;top:0;z-index:1000;
