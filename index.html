@@ -16,31 +16,33 @@
         <a href="#top" class="brand">BA Festa Booth</a>
         <nav class="nav">
           <a href="#about">부스소개</a>
-          <a href="#media">홍보영상</a>
+          <a href="#promo">홍보영상</a>
           <a href="#game">게임</a>
         </nav>
       </div>
     </header>
 
     <main id="top">
-      
-
-      <section id="about" class="section">
+      <section id="about" class="hero hero-split">
         <div class="container">
-          <h2>부스 소개</h2>
-          <p class="lead">팬들과 함께 즐기는 커뮤니티 부스입니다. 편하게 보고, 플레이하고, 추억을 남겨요.</p>
+          <div>
+            <span class="eyebrow">BA Festa Booth</span>
+            <h1 class="title-xl">블루아카이브 팬 커뮤니티 부스</h1>
+            <p class="subtitle">편하게 즐기고, 추억을 남기고, 게임도 플레이하세요.</p>
+            <p class="meta"><strong>위치:</strong> 행사장 A구역 00번 | <strong>운영:</strong> 10:00 - 18:00</p>
+          </div>
+          <div id="promo">
+            <div class="card" style="padding:.6rem">
+              <video autoplay muted loop playsinline controlslist="nodownload" style="width:100%;aspect-ratio:16/9;border:0;border-radius:.6rem">
+                <source src="./assets/promo.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
         </div>
       </section>
 
-      
-
-      <section id="media" class="section alt">
-        <div class="container">
-          <h2>홍보영상</h2>
-          <div class="card" style="padding:.8rem">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0;border-radius:.6rem"></iframe>
-          </div>
-        </div>
+      <section id="sky" aria-hidden="true">
+        <div class="clouds"></div>
       </section>
       
       <section id="game" class="section">
@@ -55,7 +57,7 @@
               <button class="btn primary" id="home-game-fs">전체화면</button>
             </div>
           </div>
-          <p class="lead" style="margin-top:1rem">더 많은 게임은 <a href="./games.html">게임 모음</a>에서 보세요.</p>
+          
         </div>
       </section>
     </main>

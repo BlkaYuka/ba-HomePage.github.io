@@ -50,3 +50,16 @@ if (shareLink) {
   tick();
 })();
 
+// Sky reveal on scroll
+(function skyReveal(){
+  const sky = document.getElementById('sky');
+  if(!sky) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        sky.classList.add('reveal');
+      }
+    });
+  }, { threshold: 0.2 });
+  io.observe(sky);
+})();
