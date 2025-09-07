@@ -33,7 +33,15 @@
         const frame = document.getElementById('game-frame');
         const warn = document.getElementById('warn');
         if(isSafeRelativePath(src)){
-          frame.src = src;
+          try{
+            const u = new URL(src, location.href);
+            if(!u.searchParams.has('v')){
+              u.searchParams.set('v', Date.now()); // cache-bust to avoid stale pages on GH Pages
+            }
+            frame.src = u.toString();
+          }catch(e){
+            frame.src = src; // fallback
+          }
         } else {
           warn.style.display = 'block';
           warn.innerText = '유효한 상대 경로(src)가 없습니다. 예: ?src=./games/mygame/index.html&title=My%20Game';
@@ -70,4 +78,3 @@
     </footer>
   </body>
   </html>
-
