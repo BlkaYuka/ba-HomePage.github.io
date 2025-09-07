@@ -7,29 +7,17 @@ window.addEventListener('load', () => {
   document.body.classList.remove('is-entering');
 });
 
-// Scroll-driven sky reveal and stage scale
-(function scrollEffects(){
-  const root = document.documentElement;
+// Slide reveal trigger: when reveal section is visible, slide panel up and raise stage
+(function slideReveal(){
   const reveal = document.getElementById('reveal');
   if(!reveal) return;
-  let ticking = false;
-  function update(){
-    const rect = reveal.getBoundingClientRect();
-    const vh = window.innerHeight || 1;
-    // progress: 0 at top in view, 1 near bottom passed
-    let p = 1 - Math.min(1, Math.max(0, rect.bottom / vh));
-    root.style.setProperty('--scrollp', p.toFixed(3));
-    ticking = false;
-  }
-  function onScroll(){
-    if(!ticking){
-      window.requestAnimationFrame(update);
-      ticking = true;
-    }
-  }
-  update();
-  document.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', onScroll);
+  const on = (add) => document.body.classList.toggle('has-slide', !!add);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ on(true); }
+    });
+  }, { threshold: 0.25 });
+  io.observe(reveal);
 })();
 
 // Subtle pointer parallax for hero title and promo card
