@@ -16,29 +16,14 @@
         <a href="#top" class="brand">BA Festa Booth</a>
         <nav class="nav">
           <a href="#about">부스소개</a>
-          <a href="#schedule">일정</a>
-          <a href="#media">미디어</a>
-          <a href="#info">이용안내</a>
-          <a href="./games.html">게임</a>
+          <a href="#media">홍보영상</a>
+          <a href="#game">게임</a>
         </nav>
       </div>
     </header>
 
     <main id="top">
-      <section class="hero">
-        <div class="container">
-          <h1>블루아카이브 페스타 부스</h1>
-          <p class="subtitle">올해 10월 | 장소: TBD | 우리 부스에서 만나요!</p>
-          <p class="links-row">
-            <a href="#media">홍보 영상</a>
-            <span class="sep" aria-hidden="true">·</span>
-            <a href="#media">게임 체험</a>
-            <span class="sep" aria-hidden="true">·</span>
-            <a href="#info">이용안내</a>
-          </p>
-          <div class="countdown" id="countdown" aria-label="행사까지 남은 시간"></div>
-        </div>
-      </section>
+      
 
       <section id="about" class="section">
         <div class="container">
@@ -55,92 +40,30 @@
         </div>
       </section>
 
-      <section id="schedule" class="section alt">
-        <div class="container grid grid-2">
-          <div>
-            <h2>일정</h2>
-            <ul class="timeline">
-              <li>
-                <span class="time">10:00</span>
-                <span class="desc">부스 오픈 및 웰컴 이벤트</span>
-              </li>
-              <li>
-                <span class="time">13:00</span>
-                <span class="desc">미니게임 토너먼트 세션 1</span>
-              </li>
-              <li>
-                <span class="time">15:30</span>
-                <span class="desc">포토 타임 & 굿즈 소개</span>
-              </li>
-              <li>
-                <span class="time">17:30</span>
-                <span class="desc">미니게임 시상 및 클로징</span>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h2>위치</h2>
-            <p>행사장 내 A구역 00번 부스 (지도는 추후 업데이트 예정)</p>
-            <div class="map-placeholder" aria-label="지도 자리">
-              지도 이미지 또는 임베드 영역
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
-      <section id="media" class="section">
+      <section id="media" class="section alt">
         <div class="container">
-          <h2>미디어</h2>
-          <p>홍보 영상과 현장 스케치 영상을 감상해보세요.</p>
-          <div class="media-grid">
-            <div class="video">
-              <!-- YouTube 예시: 링크만 바꿔서 사용하세요 -->
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-            </div>
-            <!-- 홍보 영상 바로 아래에 게임 임베드 -->
-            <div class="video">
-              <h3 style="margin:.2rem 0 0.6rem">프로모 아래 체험하기</h3>
-              <div id="promo-game-wrap-3" style="position:relative;width:100%;padding-top:56.25%;border:1px solid rgba(255,255,255,.06);border-radius:.8rem;overflow:hidden;background:#071021">
-                <iframe id="promo-game-iframe-3" title="임베드 게임 #3" src="./games/game3/index.html" style="position:absolute;inset:0;width:100%;height:100%;border:0" allow="fullscreen; autoplay; xr-spatial-tracking; gamepad" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
-              </div>
-              <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.6rem">
-                <a class="btn" href="./play.html?src=./games/game3/index.html&title=%EC%9E%84%EB%B2%A0%EB%93%9C%20%EA%B2%8C%EC%9E%84%20%233" target="_blank" rel="noopener">새 창</a>
-                <button class="btn" id="promo-game-fs-3">전체화면</button>
-              </div>
-            </div>
-            <figure class="image">
-              <img src="./assets/sample.jpg" alt="부스 이미지 예시" />
-              <figcaption>부스 이미지 예시 (이미지 교체 가능)</figcaption>
-            </figure>
-            <div class="video">
-              <!-- 로컬 mp4 예시: 파일 교체 후 사용 -->
-              <video controls preload="metadata">
-                <source src="./assets/promo.mp4" type="video/mp4" />
-                브라우저가 비디오 태그를 지원하지 않습니다.
-              </video>
-            </div>
+          <h2>홍보영상</h2>
+          <div class="card" style="padding:.8rem">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0;border-radius:.6rem"></iframe>
           </div>
         </div>
       </section>
-
-      <section id="info" class="section alt">
-        <div class="container grid grid-2">
-          <div>
-            <h2>이용 안내</h2>
-            <ul class="guide">
-              <li><strong>운영시간:</strong> 10:00 ~ 18:00</li>
-              <li><strong>대기열 안내:</strong> 스태프 안내에 따라주세요.</li>
-              <li><strong>사진/영상 촬영:</strong> 본인 및 부스 내 허용된 구역만 촬영해주세요.</li>
-              <li><strong>현장 이벤트:</strong> 게임은 <a href="./games.html">이곳</a>에서 미리 플레이해보세요!</li>
-          </ul>
-        </div>
-          <div>
-            <h2>문의</h2>
-            <p>
-              문의/협업: <a href="mailto:contact@example.com">contact@example.com</a><br />
-              최신 소식: <a href="#" id="shareLink">사이트 링크 복사</a>
-            </p>
+      
+      <section id="game" class="section">
+        <div class="container">
+          <h2>게임</h2>
+          <div id="home-game-wrap" class="card" style="padding:.8rem;position:relative;overflow:hidden">
+            <div style="position:relative;width:100%;padding-top:56.25%;background:#0f172a;border-radius:.6rem">
+              <iframe id="home-game-iframe" title="부스 게임" src="./games/game3/index.html" allow="fullscreen; autoplay; xr-spatial-tracking; gamepad" allowfullscreen webkitallowfullscreen mozallowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:.6rem"></iframe>
+            </div>
+            <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.6rem">
+              <a class="btn" href="./play.html?src=./games/game3/index.html&title=%EB%B6%80%EC%8A%A4%20%EA%B2%8C%EC%9E%84" target="_blank" rel="noopener">새 창</a>
+              <button class="btn primary" id="home-game-fs">전체화면</button>
+            </div>
           </div>
+          <p class="lead" style="margin-top:1rem">더 많은 게임은 <a href="./games.html">게임 모음</a>에서 보세요.</p>
         </div>
       </section>
     </main>
@@ -153,10 +76,10 @@
 
     <script src="./script.js"></script>
     <script>
-      // 프로모 아래 게임 전체화면 버튼
+      // 홈: 게임 전체화면 버튼
       (function(){
-        const btn = document.getElementById('promo-game-fs-3');
-        const wrap = document.getElementById('promo-game-wrap-3');
+        const btn = document.getElementById('home-game-fs');
+        const wrap = document.getElementById('home-game-wrap');
         if(btn && wrap){
           btn.addEventListener('click', () => {
             const req = wrap.requestFullscreen || wrap.webkitRequestFullscreen || wrap.mozRequestFullScreen || wrap.msRequestFullscreen;
