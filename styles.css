@@ -115,3 +115,8 @@ a:hover{opacity:.9}
 .game-card .t{font-weight:700}
 .game-card .d{color:var(--muted);font-size:.9rem;margin-top:.2rem}
 .games-sub .tools{display:flex;justify-content:flex-end;margin-top:.6rem}
+
+@media (min-width: 720px){
+  .games-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;overflow:visible}
+  .game-card{flex:initial}
+}
