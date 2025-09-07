@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>미니게임 | BA Festa Booth</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="./index.html" class="brand">BA Festa Booth</a>
+        <nav class="nav">
+          <a href="./index.html#about">부스소개</a>
+          <a href="./index.html#media">미디어</a>
+          <a href="./index.html#info">이용안내</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="game-wrap">
+      <div class="card" id="unity-card" aria-live="polite">
+        <div class="game-header">
+          <h1 style="margin:.2rem 0">Unity WebGL 게임</h1>
+          <div class="muted">로딩이 시작되면 아래 진행률이 표시됩니다.</div>
+        </div>
+        <canvas id="unity-canvas" class="game-canvas" width="960" height="540"></canvas>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-top:.6rem">
+          <progress id="unity-progress" max="1" value="0" style="width:180px"></progress>
+          <span class="muted" id="unity-status">대기 중…</span>
+        </div>
+      </div>
+
+      <!-- Fallback: JS 캔버스 게임 (Unity 빌드가 없을 때 표시) -->
+      <div class="card" id="fallback-card" hidden>
+        <div class="game-header">
+          <h1 style="margin:.2rem 0">아비도스 타겟 클릭</h1>
+          <div>
+            <span class="score" id="score">0</span>
+            <span class="muted">점</span>
+            <span style="margin-left:1rem" class="muted">남은 시간: <strong id="time">30</strong>s</span>
+          </div>
+        </div>
+        <p class="muted" style="margin:.2rem 0 1rem">Unity 빌드가 없을 경우 표시되는 예시 미니게임입니다.</p>
+        <canvas id="game" class="game-canvas" width="960" height="540" aria-label="미니게임 캔버스"></canvas>
+        <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.6rem">
+          <button class="btn" id="restart">다시 시작</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>Unity WebGL 또는 예시 캔버스 게임을 지원합니다.</small>
+      </div>
+    </footer>
+
+    <script src="./unity-loader.js"></script>
+  </body>
+  </html>

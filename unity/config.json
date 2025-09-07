@@ -1,0 +1,13 @@
+{
+  "buildFolder": "Build",
+  "loaderFile": "Build.loader.js",
+  "dataUrl": "Build.data",
+  "frameworkUrl": "Build.framework.js",
+  "codeUrl": "Build.wasm",
+  "streamingAssetsUrl": "StreamingAssets",
+  "companyName": "Your Team",
+  "productName": "BA Festa WebGL",
+  "productVersion": "1.0",
+  "decompressionFallback": true
+}
+

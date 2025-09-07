@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HTML5 캔버스 게임 | BA Festa Booth</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="./games.html" class="brand">BA Games</a>
+        <nav class="nav">
+          <a href="./index.html#about">부스소개</a>
+          <a href="./index.html#media">미디어</a>
+          <a href="./index.html#info">이용안내</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="game-wrap">
+      <div class="card">
+        <div class="game-header">
+          <h1 style="margin:.2rem 0">아비도스 타겟 클릭</h1>
+          <div>
+            <span class="score" id="score">0</span>
+            <span class="muted">점</span>
+            <span style="margin-left:1rem" class="muted">남은 시간: <strong id="time">30</strong>s</span>
+          </div>
+        </div>
+        <p class="muted" style="margin:.2rem 0 1rem">30초 동안 나타나는 타겟을 클릭해서 점수를 올려보세요!</p>
+        <canvas id="game" class="game-canvas" width="960" height="540" aria-label="미니게임 캔버스"></canvas>
+        <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.6rem">
+          <button class="btn" id="restart">다시 시작</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>HTML5 캔버스 예시 게임.</small>
+      </div>
+    </footer>
+
+    <script src="./game.js"></script>
+  </body>
+  </html>
+
