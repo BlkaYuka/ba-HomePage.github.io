@@ -44,6 +44,19 @@
       opacity:0}
     .hero-banner-top{margin-bottom:.6rem}
     .hero-banner-bottom{margin-top:.6rem}
+    .hero-bottom{position:relative; display:inline-flex; align-items:flex-end; justify-content:center; width:100%;}
+    .hero-location-shell{position:absolute; left:0; top:50%; transform:translate(-48%, -52%); pointer-events:none;}
+    .hero-play-shell{position:absolute; right:0; top:50%; transform:translate(48%, -52%); pointer-events:none;}
+    .hero-location{display:block; width:min(220px,32vw); max-width:210px; pointer-events:auto; cursor:pointer;
+      opacity:0; filter:drop-shadow(0 12px 30px rgba(8,30,60,.32)); transition:filter .2s var(--ease);
+      transform-origin:52% 48%;
+    }
+    .hero-location:hover{filter:drop-shadow(0 16px 36px rgba(8,30,60,.42));}
+    .hero-play{display:block; width:min(220px,32vw); max-width:230px; pointer-events:auto; cursor:pointer;
+      opacity:0; filter:drop-shadow(0 12px 30px rgba(8,30,60,.32)); transition:filter .2s var(--ease);
+      transform-origin:48% 46%;
+    }
+    .hero-play:hover{filter:drop-shadow(0 16px 36px rgba(8,30,60,.42));}
     .hero-img{display:block; width:100%; max-width:min(660px,82vw); max-height:66vh; object-fit:contain;
       filter:drop-shadow(0 24px 60px rgba(15,23,42,.35)); opacity:0}
 
@@ -51,9 +64,24 @@
     .ready .hero-banner.hero-banner-top{animation:slideDown .9s var(--ease) forwards}
     .ready .hero-img{animation:pop .95s var(--ease) .12s forwards}
     .ready .hero-banner.hero-banner-bottom{animation:slideUp .9s var(--ease) .22s forwards}
+    .ready .hero-location{animation:cloudIn .95s var(--ease) .32s forwards; opacity:1;}
+    .ready .hero-play{animation:cloudIn .95s var(--ease) .36s forwards; opacity:1;}
     @keyframes pop{0%{opacity:0;transform:translateY(8px) scale(.92)}60%{opacity:1;transform:translateY(0) scale(1.06)}100%{opacity:1;transform:translateY(0) scale(1)}}
     @keyframes slideDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
     @keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes cloudIn{
+      0%{opacity:0;transform:translate(-26px,-14px) scale(.92)}
+      60%{opacity:1;transform:translate(8px,6px) scale(1.06)}
+      100%{opacity:1;transform:translate(0,0) scale(1)}
+    }
+    @keyframes cloudShake{
+      0%,100%{transform:translate(0,0) rotate(0)}
+      20%{transform:translate(8px,-2px) rotate(2deg)}
+      40%{transform:translate(-10px,2px) rotate(-2deg)}
+      60%{transform:translate(6px,-1px) rotate(1.5deg)}
+      80%{transform:translate(-7px,1px) rotate(-1.5deg)}
+    }
+    .hero-location.is-shaking{animation:cloudShake .6s ease; opacity:1;}
 
     /* 스크롤 중 히어로 페이드(위치 고정, 움직임 없음) */
     .hero-fade{
@@ -75,8 +103,23 @@
       will-change: transform, opacity;
     }
 
+    /* Popup */
+    .popup{position:fixed; inset:0; z-index:20; display:flex; align-items:center; justify-content:center;}
+    .popup[hidden]{display:none}
+    .popup-backdrop{position:absolute; inset:0; background:rgba(2,6,23,.65); backdrop-filter:blur(6px);}
+    .popup-card{position:relative; z-index:1; max-width:min(720px,92vw); background:rgba(15,23,42,.94);
+      border-radius:18px; box-shadow:0 22px 60px rgba(2,6,23,.45); padding:32px 32px 28px;
+    }
+    .popup-img{display:block; width:100%; height:auto; border-radius:12px; box-shadow:0 10px 26px rgba(0,0,0,.28);}
+    .popup-close{position:absolute; top:10px; right:14px; border:0; background:transparent; color:#e2e8f0;
+      font-size:32px; line-height:1; cursor:pointer; padding:4px;
+    }
+    .popup-close:hover{color:#f8fafc}
+
     @media (prefers-reduced-motion:reduce){
       .hero-banner,.hero-img{opacity:1;animation:none !important;transform:none}
+      .hero-location{opacity:1;animation:none !important;transform:none;}
+      .hero-location.is-shaking{animation:none}
       .hero-fade{opacity:1;transition:none}
       .info-img{opacity:1;transform:none}
       .sticky::after{background:rgba(3,7,18,.12)}
@@ -86,6 +129,9 @@
       .hero-inner{gap:1.2rem}
       .hero-img{max-width:74vw;max-height:60vh}
       .hero-banner{width:min(360px,82vw)}
+      .hero-location{max-width:160px}
+      .popup-card{padding:24px 24px 20px}
+      .popup-close{top:6px; right:10px}
     }
   </style>
 </head>
@@ -100,7 +146,20 @@
           <div class="hero-inner">
             <img class="hero-banner hero-banner-top" src="./assets/top_banner.png" alt="상단 배너" decoding="async" />
             <img id="hero-img" class="hero-img" src="./assets/main-hero.png" alt="대표 이미지" decoding="async" fetchpriority="high" />
-            <img class="hero-banner hero-banner-bottom" src="./assets/bottom_banner.png" alt="하단 배너" decoding="async" />
+            <div class="hero-bottom">
+              <div class="hero-location-shell">
+                <img id="hero-location" class="hero-location" src="./assets/location.png" alt="위치 안내 구름" decoding="async"
+                  role="button" tabindex="0" aria-haspopup="dialog" aria-controls="locationPopup" />
+              </div>
+              <div class="hero-play-shell">
+                <img id="hero-play" class="hero-play"
+                    src="./assets/play_game.png"
+                    alt="게임 시작"
+                    role="link" tabindex="0"
+                    data-href="./games/game2" />
+              </div>
+              <img class="hero-banner hero-banner-bottom" src="./assets/bottom_banner.png" alt="하단 배너" decoding="async" />
+            </div>
           </div>
         </div>
       </section>
@@ -112,10 +171,18 @@
     </div>
   </section>
 
+  <div id="locationPopup" class="popup" hidden aria-hidden="true" tabindex="-1" role="dialog" aria-modal="true">
+    <div class="popup-backdrop" data-popup-close></div>
+    <div class="popup-card">
+      <button type="button" class="popup-close" aria-label="닫기" data-popup-close>&times;</button>
+      <img src="./assets/booth_position.png" alt="부스 위치" class="popup-img" decoding="async" />
+    </div>
+  </div>
+
   <script>
     // 로딩 후 초기 등장 애니 트리거
     (function(){
-      const imgs = Array.from(document.querySelectorAll('.hero-banner, .hero-img'));
+      const imgs = Array.from(document.querySelectorAll('.hero-banner, .hero-img, .hero-location, .hero-play'));
       let ready = 0;
       const fire = ()=>{ if(++ready >= imgs.length) document.body.classList.add('ready'); };
       imgs.forEach(img=>{ img.complete ? fire() : img.addEventListener('load', fire, { once:true }); });
@@ -187,6 +254,82 @@
       window.addEventListener('resize', onResize);
       window.addEventListener('orientationchange', onResize);
     })();
+
+    (function(){
+      const locationImg = document.getElementById('hero-location');
+      const popup = document.getElementById('locationPopup');
+      if(!locationImg || !popup) return;
+
+      const closeTargets = popup.querySelectorAll('[data-popup-close]');
+      let prevOverflow = '';
+
+      const openPopup = ()=>{
+        if(!popup.hidden) return;
+        prevOverflow = document.documentElement.style.overflow;
+        document.documentElement.style.overflow = 'hidden';
+        popup.hidden = false;
+        popup.setAttribute('aria-hidden', 'false');
+        popup.focus?.();
+      };
+
+      const closePopup = ()=>{
+        if(popup.hidden) return;
+        popup.hidden = true;
+        popup.setAttribute('aria-hidden', 'true');
+        document.documentElement.style.overflow = prevOverflow;
+        locationImg.focus();
+      };
+
+      const triggerShake = ()=>{
+        locationImg.classList.remove('is-shaking');
+        void locationImg.offsetWidth;
+        locationImg.classList.add('is-shaking');
+      };
+
+      locationImg.addEventListener('click', ()=>{
+        triggerShake();
+        openPopup();
+      });
+
+      locationImg.addEventListener('keydown', (event)=>{
+        if(event.key === 'Enter' || event.key === ' '){
+          event.preventDefault();
+          triggerShake();
+          openPopup();
+        }
+      });
+
+      locationImg.addEventListener('animationend', (event)=>{
+        if(event.animationName === 'cloudShake'){
+          locationImg.classList.remove('is-shaking');
+        }
+      });
+
+      closeTargets.forEach(el=>{
+        el.addEventListener('click', closePopup);
+      });
+
+      window.addEventListener('keydown', (event)=>{
+        if(event.key === 'Escape') closePopup();
+      });
+    })();
+        (function(){
+          const playImg = document.getElementById('hero-play');
+          if(!playImg) return;
+
+          const go = () => {
+            const href = playImg.dataset.href || './game2';
+            window.location.href = href;
+          };
+
+          playImg.addEventListener('click', go);
+          playImg.addEventListener('keydown', (e)=>{
+            if(e.key === 'Enter' || e.key === ' '){
+              e.preventDefault();
+              go();
+            }
+          });
+        })();
   </script>
 </body>
 </html>

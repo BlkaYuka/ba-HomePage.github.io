@@ -57,10 +57,10 @@ window.addEventListener('load', () => {
     }
   }catch(e){
     list = [
-      { title:'Unity WebGL', desc:'전체화면 지원, 로딩 필요', cover:'./assets/sample.jpg', src:'./game.html' },
-      { title:'HTML5 캔버스(예시)', desc:'가벼운 예시 게임', cover:'./assets/sample.jpg', src:'./game-canvas.html' },
-      { title:'임베드 게임 #2', desc:'별도 폴더의 게임 임베드', cover:'./assets/sample.jpg', src:'./games/game2/index.html' },
-      { title:'임베드 게임 #3', desc:'별도 폴더의 게임 임베드', cover:'./assets/sample.jpg', src:'./games/game3/index.html' }
+      { title:'Unity WebGL', desc:'전체화면 지원, 로딩 필요', cover:'./assets/main-hero.png', src:'./game.html' },
+      { title:'HTML5 캔버스(예시)', desc:'가벼운 예시 게임', cover:'./assets/main-hero.png', src:'./game-canvas.html' },
+      { title:'임베드 게임 #2', desc:'별도 폴더의 게임 임베드', cover:'./assets/main-hero.png', src:'./games/game2/index.html' },
+      { title:'임베드 게임 #3', desc:'별도 폴더의 게임 임베드', cover:'./assets/main-hero.png', src:'./games/game3/index.html' }
     ];
   }
   const others = list.filter(g => g && g.src && g.src !== featured).slice(0,6);
@@ -73,7 +73,7 @@ window.addEventListener('load', () => {
     url.searchParams.set('title', item.title);
     a.href = url.toString();
     const img = document.createElement('img');
-    img.src = item.cover || './assets/sample.jpg';
+    img.src = item.cover || './assets/main-hero.png';
     img.alt = item.title;
     const box = document.createElement('div');
     box.className = 'gx';

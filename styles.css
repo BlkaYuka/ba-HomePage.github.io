@@ -17,10 +17,15 @@
   --scrollp:0;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
+html,body{margin:0;padding:0;overscroll-behavior-x:none;touch-action:pan-y}
 body{
   font-family: 'Pretendard', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 50%, var(--sky-bottom));
+  background-color:#0f2446;
+  background-image:url('./assets/background.png?v=3');
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  background-position:center;
   color:var(--text);
   line-height:1.6;
 }
@@ -50,15 +55,18 @@ h2{font-size:clamp(1.6rem,2.8vw,2.2rem);margin:.2rem 0 .8rem}
 .eyebrow{display:inline-block;padding:.3rem .6rem;border-radius:999px;background:#e6f0ff;color:#1d4ed8;font-weight:700;font-size:.85rem;letter-spacing:.02em}
 .meta{color:var(--muted);margin-top:.6rem}
 .title-image{display:block;width:100%;max-width:520px;border-radius:.8rem;border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 30px rgba(0,0,0,.08);margin:.8rem 0}
-.title-image{display:block;width:100%;max-width:420px;border-radius:.8rem;border:1px solid rgba(0,0,0,.06);box-shadow:0 10px 30px rgba(0,0,0,.08);margin:.8rem 0}
 .hero-pro{padding:7rem 0 3.2rem;position:relative}
 .hero-inner{display:grid;gap:2rem;align-items:center}
 @media (min-width:980px){.hero-inner{grid-template-columns:1.15fr 1fr}}
 .hero-pro .title-xl{font-size:clamp(2.6rem,6vw,3.9rem);line-height:1.06;letter-spacing:-.02em}
 .hero-pro .subtitle{margin:.4rem 0 1.1rem}
+.splash-hero{min-height:100dvh;display:grid;place-items:center;padding:1.5rem 0 1rem}
+.splash-inner{width:min(1400px,96%);margin:0 auto}
+.splash-image{display:block;width:min(96vw,1400px);height:auto;max-height:82vh;object-fit:contain}
 .promo-card{position:relative;border-radius:1rem;padding:.6rem;background:linear-gradient(180deg,#fff, #f6f9ff);border:1px solid rgba(0,0,0,.06);box-shadow:0 18px 50px rgba(59,130,246,.18);max-width:720px;margin-inline:auto}
 .promo-card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(1200px 160px at 20% 0%, rgba(255,255,255,.9), transparent 60%);pointer-events:none;mix-blend-mode:overlay;opacity:.7}
 .promo-video{display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:.7rem}
+.promo-image{display:block;width:100%;height:auto;border:0;border-radius:.7rem}
 .scroll-cue{position:absolute;left:50%;bottom:.6rem;translate:-50% 0;width:26px;height:40px;border:2px solid rgba(0,0,0,.2);border-radius:20px;opacity:.8}
 .scroll-cue .wheel{position:absolute;left:50%;top:8px;width:4px;height:8px;background:rgba(0,0,0,.3);border-radius:2px;translate:-50% 0;animation:wheel 1.6s ease-in-out infinite}
 @keyframes wheel{0%{transform:translateY(0)}50%{transform:translateY(8px)}100%{transform:translateY(0)}}
@@ -160,4 +168,41 @@ body.has-slide .slide-reveal .slide-card{animation:slideUp 900ms var(--ease-out)
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   *{animation:none !important;transition:none !important}
+}
+
+/* ===== Scroll Scene (pinned hero + info reveal) ===== */
+:root{
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --p: 0;          /* scroll progress 0~1 */
+  --hero-o: 1;     /* hero opacity injected by JS */
+}
+
+/* Scene wrapper: actual height will be set by JS when needed */
+.scene{ position:relative; height:200vh; }
+.sticky{ position:sticky; top:0; height:100vh; overflow:hidden; }
+
+/* Background darken overlay as hero fades out */
+.sticky::after{
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background: rgba(3,7,18, calc(var(--p) * 0.35));
+}
+
+/* Hero stays fixed and only fades (no movement) */
+.hero{ position:relative; height:100%; display:flex; justify-content:center; align-items:center; z-index:3; }
+.hero-fade{ transition: opacity .12s var(--ease); opacity: var(--hero-o, 1) !important; }
+
+/* Info image starts below viewport and rises up with scroll */
+.info-rail{ position:absolute; top:0; left:50%; transform:translateX(-50%); height:100vh; z-index:1; pointer-events:none; will-change:transform; }
+.info-img{
+  display:block; width:min(1100px,95vw); height:auto;
+  border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.08);
+  opacity: calc(0.12 + var(--p)*0.88);
+  transform: translateY(var(--info-y, 0px)); /* JS sets --info-y */
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .hero-fade{ opacity:1; transition:none; }
+  .info-img{ opacity:1; transform:none; }
+  .sticky::after{ background:rgba(3,7,18,.12); }
 }
