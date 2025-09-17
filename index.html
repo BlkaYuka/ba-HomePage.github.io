@@ -1,118 +1,192 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>블루아카이브 페스타 부스 | 부스소개 · 홍보영상 · 게임</title>
-    <meta name="description" content="블루아카이브 페스타 부스 소개, 홍보영상, 게임 체험을 간단하고 크게 제공합니다." />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css?v=sky3" />
-    <link rel="icon" href="./assets/favicon.png" />
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="#top" class="brand">BA Festa Booth</a>
-        <nav class="nav">
-          <a href="#hero">부스소개</a>
-          <a href="#promo">홍보영상</a>
-          <a href="#stage">게임</a>
-        </nav>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MILLENNIUM24 INSUBUNHAE STORE</title>
+  <meta name="description" content="히어로 고정 + 스크롤 페이드 + 긴 이미지 풀스크롤 리빌" />
+  <link rel="icon" href="./assets/favicon.png" />
+  <link rel="preload" as="image" href="./assets/main-hero.png" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ease: cubic-bezier(.22,.61,.36,1);
+      --p: 0;           /* 스크롤 진행도(0~1) */
+      --hero-o: 1.0;      /* 히어로 투명도 (JS가 세팅) */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;overscroll-behavior-x:none;touch-action:pan-y}
+    body{
+      color:#0f172a;
+      background:#0f2446 url('./assets/background.png?v=3') center/cover fixed no-repeat;
+      overflow-x:hidden;
+      font-family:'Pretendard',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    /* ===== Scroll Scene ===== */
+    .scene{ position:relative; height:200vh; }             /* 실제 높이는 JS가 다시 설정 */
+    .sticky{ position:sticky; top:0; height:100vh; overflow:hidden; }
+
+    /* 배경 어둡게 (히어로 사라질수록 진해짐) */
+    .sticky::after{
+      content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
+      background: rgba(3,7,18, calc(var(--p) * 0.35));
+    }
+
+    /* ===== Hero (고정, 항상 최상단 레이어) ===== */
+    .hero{position:relative; height:100%; display:flex; justify-content:center; align-items:center; z-index:3}
+    .hero-shell{position:relative; width:min(1180px,92vw); margin:0 auto}
+    .hero-inner{display:flex; flex-direction:column; align-items:center; gap:1.2rem}
+
+    .hero-banner{display:block; width:min(400px,64vw); max-width:100%;
+      border-radius:1rem; mix-blend-mode:screen; filter:drop-shadow(0 18px 48px rgba(8,30,60,.38));
+      opacity:0}
+    .hero-banner-top{margin-bottom:.6rem}
+    .hero-banner-bottom{margin-top:.6rem}
+    .hero-img{display:block; width:100%; max-width:min(660px,82vw); max-height:66vh; object-fit:contain;
+      filter:drop-shadow(0 24px 60px rgba(15,23,42,.35)); opacity:0}
+
+    /* 로딩 시 1회 등장 애니 */
+    .ready .hero-banner.hero-banner-top{animation:slideDown .9s var(--ease) forwards}
+    .ready .hero-img{animation:pop .95s var(--ease) .12s forwards}
+    .ready .hero-banner.hero-banner-bottom{animation:slideUp .9s var(--ease) .22s forwards}
+    @keyframes pop{0%{opacity:0;transform:translateY(8px) scale(.92)}60%{opacity:1;transform:translateY(0) scale(1.06)}100%{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes slideDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+    /* 스크롤 중 히어로 페이드(위치 고정, 움직임 없음) */
+    .hero-fade{
+      transition: opacity .12s var(--ease);
+      opacity: var(--hero-o, 1) !important;  /* JS 계산값만 사용 */
+    }
+
+    /* ===== info 이미지 (아래 레이어, 아래에서 위로 상승) ===== */
+    .info-rail{
+      position:absolute; top:0; left:50%; transform:translateX(-50%);
+      height:100vh; z-index:1; pointer-events:none;
+      will-change:transform;
+    }
+    .info-img{
+      display:block; width:min(1100px,95vw); height:auto;
+      border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.08);
+      opacity: calc(0.3 + var(--p)*3.8);          /* 진행하며 서서히 보이게 */
+      transform: translateY(var(--info-y, 0px));     /* JS가 translateY 주입 */
+      will-change: transform, opacity;
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .hero-banner,.hero-img{opacity:1;animation:none !important;transform:none}
+      .hero-fade{opacity:1;transition:none}
+      .info-img{opacity:1;transform:none}
+      .sticky::after{background:rgba(3,7,18,.12)}
+    }
+
+    @media (max-width:900px){
+      .hero-inner{gap:1.2rem}
+      .hero-img{max-width:74vw;max-height:60vh}
+      .hero-banner{width:min(360px,82vw)}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Scroll Scene ===== -->
+  <section class="scene" id="scene">
+    <div class="sticky" id="sticky">
+      <!-- Hero -->
+      <section id="hero" class="hero">
+        <div class="hero-shell hero-fade">
+          <div class="hero-inner">
+            <img class="hero-banner hero-banner-top" src="./assets/top_banner.png" alt="상단 배너" decoding="async" />
+            <img id="hero-img" class="hero-img" src="./assets/main-hero.png" alt="대표 이미지" decoding="async" fetchpriority="high" />
+            <img class="hero-banner hero-banner-bottom" src="./assets/bottom_banner.png" alt="하단 배너" decoding="async" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 긴 info 이미지 (예: 1500×8237) -->
+      <div class="info-rail">
+        <img class="info-img" id="infoImg" src="./assets/info.png" alt="판매 아이템 목록" loading="lazy" decoding="async" />
       </div>
-    </header>
+    </div>
+  </section>
 
-    <main id="top">
-      <section id="hero" class="hero-pro">
-        <div class="hero-inner container">
-          <div class="copy">
-            <span class="eyebrow">BA Festa Booth</span>
-            <img class="title-image" src="./assets/sample.jpg" alt="부스 타이틀 이미지" />
-            <h1 class="title-xl" id="title">블루아카이브 팬 커뮤니티 부스</h1>
-            <p class="subtitle">편하게 즐기고, 추억을 남기고, 게임도 플레이하세요.</p>
-            <p class="meta"><strong>행사:</strong> 블루아카이브 페스타 · <strong>참여일자:</strong> 10월 12일 · <strong>위치:</strong> A구역 00번</p>
-            <div style="margin-top:.8rem;display:flex;gap:.6rem;flex-wrap:wrap">
-              <a class="btn primary" href="#stage">게임 바로 보기</a>
-              <a class="btn" href="./play.html?src=./games/game3/index.html&title=%EB%B6%80%EC%8A%A4%20%EA%B2%8C%EC%9E%84" target="_blank" rel="noopener">새 창에서 플레이</a>
-            </div>
-          </div>
-          <div class="promo" id="promo">
-            <div class="promo-card" aria-label="부스 홍보 영상">
-              <video class="promo-video" autoplay muted loop playsinline preload="metadata" controlslist="nodownload noplaybackrate">
-                <source src="./assets/promo.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </div>
-        <div class="scroll-cue" aria-hidden="true"><span class="wheel"></span></div>
-      </section>
+  <script>
+    // 로딩 후 초기 등장 애니 트리거
+    (function(){
+      const imgs = Array.from(document.querySelectorAll('.hero-banner, .hero-img'));
+      let ready = 0;
+      const fire = ()=>{ if(++ready >= imgs.length) document.body.classList.add('ready'); };
+      imgs.forEach(img=>{ img.complete ? fire() : img.addEventListener('load', fire, { once:true }); });
+      setTimeout(()=>document.body.classList.add('ready'), 1200);
+    })();
 
-      <section id="reveal" class="slide-reveal" aria-hidden="true">
-        <div class="slide-card" aria-hidden="true"></div>
-      </section>
-      
-      <section id="stage" class="stage">
-        <div class="stage-inner container">
-          <div id="stage-frame" class="stage-frame" aria-live="polite">
-            <iframe id="stage-iframe" title="부스 게임" src="./games/game3/index.html" allow="fullscreen; autoplay; xr-spatial-tracking; gamepad" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
-            <div class="stage-tools">
-              <a class="btn" href="./play.html?src=./games/game3/index.html&title=%EB%B6%80%EC%8A%A4%20%EA%B2%8C%EC%9E%84" target="_blank" rel="noopener">새 창</a>
-              <button class="btn primary" id="btn-stage-fs" type="button">전체화면</button>
-            </div>
-          </div>
-        </div>
-      </section>
+    // sticky 씬: 이미지 실제 렌더 높이에 맞춰 높이/이동량 계산 + 진행도→투명도/이동 반영
+    (function(){
+      const clamp = (n,min,max)=>Math.min(Math.max(n,min),max);
+      const scene = document.getElementById('scene');
+      const infoImg = document.getElementById('infoImg');
+      const heroShell = document.querySelector('.hero-shell');
 
-      <section id="shop" class="shop">
-        <div class="container">
-          <h2>부스 판매 상품</h2>
-          <div class="shop-grid">
-            <figure class="shop-card">
-              <img src="./assets/sample.jpg" alt="상품 A" />
-              <figcaption class="cap">상품 A — 설명/가격 표기</figcaption>
-            </figure>
-            <figure class="shop-card">
-              <img src="./assets/sample.jpg" alt="상품 B" />
-              <figcaption class="cap">상품 B — 설명/가격 표기</figcaption>
-            </figure>
-            <figure class="shop-card">
-              <img src="./assets/sample.jpg" alt="상품 C" />
-              <figcaption class="cap">상품 C — 설명/가격 표기</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
+      let vh=0, imgH=0, total=0, startY=0, endY=0;
 
-      <section id="more-games" class="section">
-        <div class="container">
-          <h2>더 많은 게임</h2>
-          <div id="more-games-row" class="games-row" aria-live="polite"></div>
-          <div class="games-sub tools" style="margin-top:.6rem">
-            <a class="btn" href="./games.html">게임 모음 모두 보기</a>
-          </div>
-        </div>
-      </section>
-    </main>
+      function measure(){
+        vh = window.innerHeight || document.documentElement.clientHeight;
 
-    <footer class="site-footer">
-      <div class="container">
-        <small>© <span id="year"></span> 블루아카이브 페스타 팬부스. 이 사이트는 팬메이드입니다.</small>
-      </div>
-    </footer>
-
-    <script src="./script.js?v=sky3"></script>
-    <script>
-      // 전체화면 버튼
-      (function(){
-        const wrap = document.getElementById('stage-frame');
-        const btn = document.getElementById('btn-stage-fs');
-        if(btn && wrap){
-          btn.addEventListener('click', () => {
-            const req = wrap.requestFullscreen || wrap.webkitRequestFullscreen || wrap.mozRequestFullScreen || wrap.msRequestFullscreen;
-            if(req) req.call(wrap);
-          });
+        // 현재 렌더 폭 기준 실제 이미지 높이 계산
+        const renderedW = Math.min(1100, window.innerWidth * 0.95);
+        if (infoImg.complete && infoImg.naturalWidth) {
+          imgH = infoImg.naturalHeight * (renderedW / infoImg.naturalWidth);
+        } else {
+          // 로드 전 추정치(원본 1500x8237 가정)
+          imgH = 8237 * (renderedW / 1500);
         }
-      })();
-    </script>
-  </body>
-  </html>
+
+        // 씬 높이: 히어로 100vh + 이미지 전부 + 마무리 여유 1vh (거의 딱 붙게)
+        const sceneH = vh + imgH + Math.max(0.01*vh, 1);
+        scene.style.height = `${sceneH}px`;
+
+        // sticky 구간 스크롤 거리
+        total = sceneH - vh;
+
+        // 이미지 이동 범위: 화면 아래에서 시작해서 끝까지 올라오기
+        startY = vh;             // 뷰포트 아래에서 시작
+        endY   = -(imgH - vh);   // 이미지 상단이 상단에 닿을 때
+      }
+
+      let ticking = false;
+      function apply(){
+        const rect = scene.getBoundingClientRect();
+        const scrolled = 0 - rect.top;
+        const p = clamp(scrolled / total, 0, 1);
+
+        // 히어로 빠르게 사라지게: p=0.25에서 완전 0
+        const T = 0.13; // 더 빨리면 0.2, 더 늦게면 0.3~0.35
+        const heroOpacity = 1 - Math.min(p / T, 1);
+
+        document.documentElement.style.setProperty('--p', p.toFixed(4));
+        document.documentElement.style.setProperty('--hero-o', heroOpacity.toFixed(4));
+
+        const y = startY + (endY - startY) * p;
+        infoImg.style.setProperty('--info-y', `${y.toFixed(2)}px`);
+
+        // 히어로가 거의 0이면 클릭 막아 겹침 체감 제거
+        heroShell.style.pointerEvents = heroOpacity < 0.05 ? 'none' : 'auto';
+
+        ticking = false;
+      }
+
+      function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(apply); } }
+      function onResize(){ measure(); apply(); }
+
+      if (!infoImg.complete) infoImg.addEventListener('load', onResize, { once:true });
+
+      measure(); apply();
+      window.addEventListener('scroll', onScroll, { passive:true });
+      window.addEventListener('resize', onResize);
+      window.addEventListener('orientationchange', onResize);
+    })();
+  </script>
+</body>
+</html>
