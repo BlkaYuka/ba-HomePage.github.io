@@ -194,9 +194,10 @@
     /* iOS/Safari에서 fixed 배경 이슈 회피 */
     @media (max-width: 900px){
       body{
-        background-attachment: scroll;
-        background-position: center top;
-        background-size: cover;
+          background-image: url('./assets/background_mobile.png?v=1');
+          background-attachment: scroll;   /* fixed → scroll (모바일에서 튀는 현상 방지) */
+          background-position: center top;
+          background-size: cover;
       }
     }
 
