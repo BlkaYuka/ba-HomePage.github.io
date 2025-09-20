@@ -572,12 +572,10 @@
       if(!locationImg || !popup) return;
 
       const closeTargets = popup.querySelectorAll('[data-popup-close]');
-      let prevOverflow = '';
 
       const openPopup = ()=>{
         if(!popup.hidden) return;
-        prevOverflow = document.documentElement.style.overflow;
-        document.documentElement.style.overflow = 'hidden';
+        lockScroll();                                 // ✅ 추가
         popup.hidden = false;
         popup.setAttribute('aria-hidden', 'false');
         popup.focus?.();
@@ -586,9 +584,10 @@
         if(popup.hidden) return;
         popup.hidden = true;
         popup.setAttribute('aria-hidden', 'true');
-        document.documentElement.style.overflow = prevOverflow;
+        unlockScroll();                               // ✅ 추가
         locationImg.focus();
       };
+
       const triggerShake = ()=>{
         locationImg.classList.remove('is-shaking');
         void locationImg.offsetWidth;
@@ -697,8 +696,7 @@
       let prevOverflow = '';
       const openPopup = ()=>{
         if(!popup.hidden) return;
-        prevOverflow = document.documentElement.style.overflow;
-        document.documentElement.style.overflow = 'hidden';
+        lockScroll();                                 // ✅ 추가
         popup.hidden = false;
         popup.setAttribute('aria-hidden','false');
         popup.focus?.();
@@ -707,7 +705,7 @@
         if(popup.hidden) return;
         popup.hidden = true;
         popup.setAttribute('aria-hidden','true');
-        document.documentElement.style.overflow = prevOverflow;
+        unlockScroll();                               // ✅ 추가
         fab.focus();
       };
       fab.addEventListener('click', openPopup);
@@ -719,6 +717,35 @@
       });
       window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closePopup(); });
     })();
+
+    // 팝업 공통: 스크롤 잠금/해제
+    let __lockY = 0;
+    function lockScroll(){
+      __lockY = window.scrollY || window.pageYOffset || 0;
+      const b = document.body;
+      // 바디 고정
+      b.style.position = 'fixed';
+      b.style.top = `-${__lockY}px`;
+      b.style.left = '0';
+      b.style.right = '0';
+      b.style.width = '100%';
+      b.style.overflow = 'hidden';
+    }
+    function unlockScroll(){
+      const b = document.body;
+      // 바디 고정 해제
+      b.style.position = '';
+      b.style.top = '';
+      b.style.left = '';
+      b.style.right = '';
+      b.style.width = '';
+      b.style.overflow = '';
+      // 원래 위치로 복원
+      window.scrollTo(0, __lockY);
+      // sticky/vh 재계산 유도
+      window.dispatchEvent(new Event('resize'));
+      window.requestAnimationFrame(()=> window.dispatchEvent(new Event('scroll')));
+    }
   </script>
 </body>
 </html>
