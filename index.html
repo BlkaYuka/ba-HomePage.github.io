@@ -608,6 +608,25 @@
       window.addEventListener('keydown', (event)=>{ if(event.key === 'Escape') closePopup(); });
     })();
 
+    // 플레이 버튼 이동
+    (function(){
+      const playImg = document.getElementById('hero-play');
+      if(!playImg) return;
+
+      const go = () => {
+        const href = playImg.dataset.href || './games/game2';
+        window.location.assign(href);
+      };
+
+      playImg.addEventListener('click', go);
+      playImg.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          go();
+        }
+      });
+    })();
+
     // 기여자 데이터 (단일 소스)
     const CONTRIBUTORS_DATA = (function(){
       const VQ='?v=20250920';
