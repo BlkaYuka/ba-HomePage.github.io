@@ -274,8 +274,9 @@
     }
     .contributors-fab .c-letter{
       transform: translateY(0.5px);
+      color: rgba(147,197,253,0.9); /* 하늘색 (tailwind sky-300 느낌) + 약간 투명 */
       text-shadow:
-        0 1px 0 rgba(255,255,255,.5),
+        0 1px 0 rgba(255,255,255,.4),
         0 2px 6px rgba(2,6,23,.25);
       user-select: none;
     }
@@ -321,7 +322,7 @@
     }
     .contributors-popup-title{
       margin: 0 30px 12px 0;
-      color: #e2e8f0;
+      color: rgba(191,219,254,0.9); /* 하늘색 계열 텍스트 */
       font-size: 16px; font-weight: 800;
     }
     .contributors-list{
@@ -364,7 +365,7 @@
       text-decoration: none;
       cursor: default;
     }
-    .unofficial-badge small{ opacity: .85; font-weight: 600; }
+    .unofficial-badge small{ opacity: .8; font-weight: 600; color: rgba(191,219,254,0.75); }
     .unofficial-badge a{
       color: #c7d2fe; text-decoration: underline; text-underline-offset: 2px;
     }
@@ -464,8 +465,7 @@
 
   <!-- 우측 하단 비공식 안내 배지 -->
   <div class="unofficial-badge" role="note" aria-label="비공식 팬 사이트 안내">
-    <span>비공식 팬 사이트</span>
-    <small>Not affiliated with NEXON</small>
+    <span>Unofficial Fan Site</span>
   </div>
 
   <script>
