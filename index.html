@@ -142,7 +142,6 @@
 
     /* ===== Mobile layout (≤900px): 하단 배너 아래에 좌/우 버튼 배치 ===== */
     @media (max-width: 900px){
-      /* 하단 영역을 2행 그리드로: 1행=배너(2칸), 2행=왼쪽/오른쪽 버튼 */
       .hero-bottom{
         display:grid;
         grid-template-columns: 1fr 1fr;
@@ -154,65 +153,35 @@
         row-gap:.6rem;
         column-gap:.75rem;
         width:100%;
-        /* 좌우/하단 여백 + 노치/홈 인디케이터 안전영역 */
         padding: .25rem 16px calc(14px + env(safe-area-inset-bottom, 0px));
       }
-
-      /* 배너는 1행 전체 */
-      .hero-banner.hero-banner-bottom{
-        grid-area: banner;
-        margin: .35rem 0 .15rem 0; /* 배너 아래 공간 조금 */
-      }
-
-      /* 데스크톱용 절대배치/트랜스폼 해제하고, 그리드 셀 중앙 정렬 */
+      .hero-banner.hero-banner-bottom{ grid-area: banner; margin: .35rem 0 .15rem 0; }
       .hero-location-shell,
-      .hero-play-shell{
-        position: static;
-        transform: none;
-        pointer-events: none; /* 내부 이미지만 클릭 */
-        width: 100%;
-        display: flex;
-        justify-content: center;
-      }
+      .hero-play-shell{ position: static; transform: none; pointer-events: none; width: 100%; display: flex; justify-content: center; }
       .hero-location-shell{ grid-area: left; }
       .hero-play-shell{ grid-area: right; }
-
-      /* 버튼 크기: 너무 크거나 작지 않게, 화면 안쪽으로 */
-      .hero-location,
-      .hero-play{
-        pointer-events: auto;
-        width: clamp(140px, 42vw, 200px);
-        height: auto;
-        max-width: 200px;
-      }
-
-      /* 히어로 본체/배너 크기 약간 보수 */
+      .hero-location, .hero-play{ pointer-events:auto; width: clamp(140px, 42vw, 200px); height:auto; max-width:200px; }
       .hero-img{ max-width:78vw; max-height:56vh; }
       .hero-banner{ width:min(320px,78vw); }
     }
 
-    /* iOS/Safari에서 fixed 배경 이슈 회피 */
     @media (max-width: 900px){
       body{
           background-image: url('./assets/background_mobile.png?v=1');
-          background-attachment: scroll;   /* fixed → scroll (모바일에서 튀는 현상 방지) */
+          background-attachment: scroll;
           background-position: center top;
           background-size: cover;
       }
     }
 
-    /* ===== Scroll indicator (hero의 직속 자식으로 배치) ===== */
+    /* ===== Scroll indicator ===== */
     .scroll-indicator{
-      position:absolute;      /* 부모: .hero */
-      bottom:14px;
-      left:50%;
-      transform:translateX(-50%);
+      position:absolute;
+      bottom:14px; left:50%; transform:translateX(-50%);
       display:flex; flex-direction:column; align-items:center;
       font-size:12px; font-weight:700; letter-spacing:.08em;
-      color:#e2e8f0; opacity:.9;
-      animation:bounce 1.8s infinite;
-      pointer-events:none;
-      z-index:1000;
+      color:#e2e8f0; opacity:.9; animation:bounce 1.8s infinite;
+      pointer-events:none; z-index:1000;
       text-shadow:0 2px 10px rgba(0,0,0,.35);
       will-change: transform, opacity;
     }
@@ -220,7 +189,6 @@
     @keyframes bounce{ 0%,100%{transform:translate3d(-50%,0,0)} 50%{transform:translate3d(-50%,6px,0)} }
     .scroll-indicator.hide{ opacity:0; transition:opacity .4s ease; }
 
-    /* ✅ Safari 전용 폴백: 사파리에서만 viewport 고정 */
     @supports (-webkit-touch-callout: none) {
       .scroll-indicator.is-safari-fixed{
         position: fixed;
@@ -229,9 +197,126 @@
         transform: translateX(-50%);
       }
     }
+
+    /* ===== Contributors (left fixed stack with icons) ===== */
+    .contributors{
+      position: fixed;
+      left: 12px;
+      top: 14px;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none; /* 자식만 클릭 가능 */
+    }
+    .contributors a{
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      min-height: 44px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .01em;
+      color: #e2e8f0;
+      background: rgba(15,23,42,.72);
+      border: 1px solid rgba(148,163,184,.22);
+      box-shadow: 0 8px 24px rgba(2,6,23,.28);
+      transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+    }
+    .contributors a:hover,
+    .contributors a:focus-visible{
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(2,6,23,.38);
+      background: rgba(15,23,42,.82);
+      outline: none;
+    }
+    .contributors a svg{
+      width: 18px; height: 18px; flex:0 0 18px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,.25));
+    }
+    .contributors a span{
+      max-width: 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    @media (max-width: 900px){
+      .contributors{ left:8px; top:8px; transform:scale(.92); gap:8px; }
+      .contributors a{ min-height:40px; padding:9px 10px; }
+    }
+    /* ===== Unofficial badge (bottom-right) ===== */
+    .unofficial-badge{
+      position: fixed;
+      right: max(8px, env(safe-area-inset-right, 0px));
+      bottom: max(10px, env(safe-area-inset-bottom, 0px));
+      z-index: 80;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: .01em;
+      color: #e2e8f0;
+      background: rgba(15,23,42,.72);
+      border: 1px solid rgba(148,163,184,.24);
+      box-shadow: 0 8px 24px rgba(2,6,23,.28);
+      backdrop-filter: blur(6px);
+      text-decoration: none; /* 전체가 링크일 수도 있으니 기본 밑줄 제거 */
+      cursor: default;
+    }
+    .unofficial-badge small{
+      opacity: .85;
+      font-weight: 600;
+    }
+    .unofficial-badge a{
+      color: #c7d2fe; /* 살짝 푸른 강조 */
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .unofficial-badge:hover{
+      background: rgba(15,23,42,.82);
+      transform: translateY(-1px);
+      transition: all .15s var(--ease);
+    }
+
+    /* 더 작은 화면에서 살짝 축소 */
+    @media (max-width: 900px){
+      .unofficial-badge{
+        padding: 7px 9px;
+        font-size: 11px;
+        right: max(6px, env(safe-area-inset-right, 0px));
+        bottom: max(8px, env(safe-area-inset-bottom, 0px));
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ===== SVG ICON SPRITE (YouTube / X / GitHub / Link) ===== -->
+  <svg width="0" height="0" style="position:absolute;visibility:hidden" aria-hidden="true">
+    <symbol id="ic-youtube" viewBox="0 0 24 24">
+      <path d="M23.5 6.2a4 4 0 0 0-2.8-2.8C18.7 3 12 3 12 3s-6.7 0-8.7.4A4 4 0 0 0 .5 6.2 41 41 0 0 0 0 12a41 41 0 0 0 .5 5.8 4 4 0 0 0 2.8 2.8C5.3 21 12 21 12 21s6.7 0 8.7-.4a4 4 0 0 0 2.8-2.8A41 41 0 0 0 24 12a41 41 0 0 0-.5-5.8zM9.7 15.5V8.5l6.4 3.5-6.4 3.5z"/>
+    </symbol>
+    <symbol id="ic-x" viewBox="0 0 24 24">
+      <path d="M18.3 2H21l-6.3 7.2L22 22h-6.8l-5.3-6.9L3.7 22H1l6.8-7.7L2 2h6.9l5 6.6L18.3 2zm-2 18h2.2L7.9 4H5.6l10.7 16z"/>
+    </symbol>
+    <symbol id="ic-github" viewBox="0 0 24 24">
+      <path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6V21c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.1.1 1.6 1.1 1.6 1.1 1 .1.7 1.8 2.9 1.3.1-.8.4-1.3.8-1.6-2.6-.3-5.4-1.3-5.4-6a4.6 4.6 0 0 1 1.2-3.2 4.3 4.3 0 0 1 .1-3.2s1-.3 3.3 1.2a11.4 11.4 0 0 1 6 0C16.5 3.9 17.5 4.2 17.5 4.2a4.3 4.3 0 0 1 .1 3.2 4.6 4.6 0 0 1 1.2 3.2c0 4.7-2.8 5.7-5.4 6 .4.3.8 1 .8 2v3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/>
+    </symbol>
+    <symbol id="ic-link" viewBox="0 0 24 24">
+      <path d="M10.6 13.4a5 5 0 0 0 7.1 0l2-2a5 5 0 1 0-7.1-7.1l-1.6 1.6a1 1 0 1 0 1.4 1.4l1.6-1.6a3 3 0 1 1 4.3 4.3l-2 2a3 3 0 0 1-4.3 0 1 1 0 0 0-1.4 1.4z"/>
+      <path d="M13.4 10.6a5 5 0 0 0-7.1 0l-2 2a5 5 0 1 0 7.1 7.1l1.6-1.6a1 1 0 1 0-1.4-1.4l-1.6 1.6a3 3 0 1 1-4.3-4.3l2-2a3 3 0 0 1 4.3 0 1 1 0 0 0 1.4-1.4z"/>
+    </symbol>
+  </svg>
+
+  <!-- ===== 좌측 고정: 기여자 링크 리스트 ===== -->
+  <nav id="contributorsList" class="contributors hero-fade" aria-label="프로젝트 기여자"></nav>
 
   <!-- ===== Scroll Scene ===== -->
   <section class="scene" id="scene">
@@ -307,7 +392,7 @@
         if (infoImg.complete && infoImg.naturalWidth) {
           imgH = infoImg.naturalHeight * (renderedW / infoImg.naturalWidth);
         } else {
-          imgH = 8237 * (renderedW / 1500);
+          imgH = 8237 * (renderedW / 1500); // fallback ratio
         }
 
         const sceneH = vh + imgH + Math.max(0.01*vh, 1);
@@ -435,6 +520,76 @@
       const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
       if(isSafari){ ind.classList.add('is-safari-fixed'); }
     })();
-  </script>
+
+    /* ===== 좌측 기여자 스택: 아이콘 포함 자동 렌더 ===== */
+      (function(){
+        const root = document.getElementById('contributorsList');
+        if(!root) return;
+
+        // ✅ 파일 아이콘 사용 예시 (SVG/PNG 모두 가능)
+        const CONTRIBUTORS = [
+          { name: '불카유카', url: 'https://www.youtube.com/@yuuka0314', icon: 'youtube' },
+          { name: '뚜니펭귄', url: 'https://x.com/ddunipeng?t=tmUWbVuvwOxBOBXGA4z4tA&s=09',     icon: 'x' },
+          { name: 'jwsts108', url: 'https://www.pixiv.net/users/100904459', iconPath: 'assets/logo/logo-pixiv.png' },
+          { name: '푸른새싹', url: 'https://artmug.kr/index.php?channel=view&uid=33982', iconPath: 'assets/logo/logo-artmug.png' },
+          { name: 'goms', url: 'https://github.com/goms7', icon: 'github' },
+          { name: 'devbyhwang', url: 'https://github.com/devbyhwang', icon: 'github' },
+        ];
+
+        const openAttrs = { target:'_blank', rel:'noopener noreferrer' };
+
+        // 내장 스프라이트(유튜브/X/GitHub/링크)도 fallback으로 유지
+        const spriteId = (kind)=>({
+          youtube: 'ic-youtube',
+          x: 'ic-x',
+          github: 'ic-github',
+          link: 'ic-link'
+        }[kind] || 'ic-link');
+
+        const makeIconNode = (c)=>{
+          // 1) 파일 경로가 있으면 <img>로 로드
+          if (c.iconPath){
+            const img = document.createElement('img');
+            img.src = c.iconPath;
+            img.alt = '';
+            img.width = 18; img.height = 18;
+            img.decoding = 'async';
+            img.loading = 'lazy';
+            img.className = 'icon img';
+            // 외부 CDN을 쓴다면: img.crossOrigin = 'anonymous';
+            return img;
+          }
+          // 2) 없으면 내장 스프라이트 사용
+          const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+          svg.setAttribute('aria-hidden','true');
+          svg.classList.add('icon','svg');
+          const use = document.createElementNS('http://www.w3.org/2000/svg','use');
+          use.setAttributeNS('http://www.w3.org/1999/xlink','href',`#${spriteId(c.icon)}`);
+          svg.appendChild(use);
+
+          // 기본 톤 (배경이 어두워서 연한 색)
+          const fill = (c.icon==='youtube') ? '#ff4d4f'
+                    : (c.icon==='x' || c.icon==='github') ? '#e5e7eb'
+                    : '#9ec5ff';
+          svg.style.fill = fill;
+          return svg;
+        };
+
+        CONTRIBUTORS.forEach(c=>{
+          const a = document.createElement('a');
+          a.href = c.url; a.target = openAttrs.target; a.rel = openAttrs.rel;
+          a.setAttribute('aria-label', `${c.name}로 이동`);
+
+          a.appendChild(makeIconNode(c));
+          const label = document.createElement('span'); label.textContent = c.name;
+          a.appendChild(label);
+          root.appendChild(a);
+        });
+      })();
+    </script>
+    <div class="unofficial-badge" role="note" aria-label="비공식 팬 사이트 안내">
+      <span>비공식 팬 사이트</span>
+      <small>Not affiliated with NEXON</small>
+    </div>
 </body>
 </html>
