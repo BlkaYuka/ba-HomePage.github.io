@@ -423,7 +423,7 @@
                      src="./assets/play_game.png?v=20250920"
                      alt="게임 시작"
                      role="link" tabindex="0"
-                     data-href="./games/game2" />
+                     data-href="https://rhdnjs7.itch.io/blueyuka" />
               </div>
               <img class="hero-banner hero-banner-bottom" src="./assets/bottom_banner.png?v=20250920" alt="하단 배너" decoding="async" />
             </div>
@@ -613,8 +613,7 @@
       if(!playImg) return;
 
       const go = () => {
-        const href = playImg.dataset.href || './games/game2';
-        window.location.assign(href);
+        window.location.assign("https://rhdnjs7.itch.io/blueyuka");
       };
 
       playImg.addEventListener('click', go);
